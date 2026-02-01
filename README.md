@@ -31,8 +31,8 @@ The project is divided into three main packages within this monorepo:
 
 1.  **Clone the repository:**
     ```bash
-    git clone <YOUR_REPO_URL>
-    cd nesso-assignment
+    git clone https://github.com/bayunugrohoDev/nesso-digitale
+    cd nesso-digitale
     ```
 
 2.  **Install dependencies:**
@@ -64,30 +64,22 @@ The project is divided into three main packages within this monorepo:
         ```
 
 
-## Technical Decisions & Trade-offs
+## Architectural & Technical Highlights
 
-*   **Monorepo Architecture:**
-    Monorepo Architecture: I chose a monorepo structure using NPM Workspaces to cleanly separate the applications (`next-landing-page`, `vite-dashboard`) while enabling efficient code sharing. This is most evident with the `shared-ui` and `shared-tailwind` packages, ensuring visual and functional consistency across the project.
+This project is structured as a modern monorepo to demonstrate best practices in frontend development, focusing on code reusability, scalability, and separation of concerns.
 
-*   **Styling:**
-    Styling & Tailwind v4: I utilized Tailwind CSS v4 for the landing page to leverage its "CSS-first" engine. To bridge the gap between v4 (Next.js) and v3 (Vite), I centralized design tokens using CSS Variables in packages/shared-tailwind. This ensures a "pixel-tight" implementation from Figma while managing the different configuration systems of each framework..
+*   **Monorepo Architecture with NPM Workspaces:** The entire project is contained within a single repository using NPM Workspaces. This structure allows for the clean separation of distinct applications (`apps` directory) while enabling efficient code sharing through local packages (`packages` directory). This approach simplifies dependency management and ensures consistency across the ecosystem.
 
-*   **State Management (Vite App):**
-    State Management (Vite App): For the dashboard, I relied on React's built-in state management and URL search parameters for filtering logic. By avoiding external libraries like Redux or Zustand, I kept the bundle size minimal and ensured that the application state (like search results) is easily shareable and bookmarkable via the URL—a key requirement for admin-style dashboards.
+*   **Two Distinct Applications:**
+    *   **`next-landing-page`:** A server-side rendered (SSR) landing page built with Next.js and the App Router. This choice is ideal for a public-facing website, providing excellent SEO capabilities and optimized performance out of the box.
+    *   **`vite-dashboard`:** A client-side rendered (CSR) single-page application built with React and Vite. Vite was chosen for its rapid development server and fast build times, which are perfect for an internal tool or dashboard.
 
-## Additional Notes
+*   **Centralized Code Sharing:**
+    *   **`shared-ui`:** A dedicated package containing a library of reusable React components (e.g., `Button`, `Card`, `Input`). Both the landing page and the dashboard consume this package, ensuring a consistent user interface and user experience across the entire platform.
+    *   **`shared-tailwind`:** A shared package for Tailwind CSS configuration and base styles. This centralizes the design system's tokens and utilities, making it easy to maintain a consistent visual identity.
+    *   **`shared-config`:** This package provides a common TypeScript configuration (`tsconfig.json`), ensuring that all projects in the monorepo adhere to the same strict type-checking rules.
 
-Responsiveness:
-The layout follows a mobile-first strategy, specifically addressing complex elements like the Hero image and project carousels. I used `overflow-x-hidden` on section levels and switched from `w-screen` to `w-full` for decorative lines to prevent unwanted horizontal scrolling on mobile devices.
-
-Accessibility:
-I prioritized semantic HTML by using tags like `<header>`, `<main>`, and `<section>`. To ensure a great user experience for everyone, I implemented proper keyboard navigation and used the key prop pattern in forms to ensure state resets correctly without side effects, making the UI more predictable.
-
-Performance:
-I leverAGED the `next/image` component with the `priority` attribute for Hero assets to optimize Largest Contentful Paint (LCP). Additionally, I resolved Next.js image warnings by explicitly managing aspect ratios with `width: auto` and `height: auto` styles to prevent layout shifts.
-
-SEO (for the Landing Page):
-Metadata is centrally managed in `layout.tsx` using the Next.js Metadata API. I ensured a clean document outline with a single H1 per page and implemented Open Graph (OG) tags to ensure the brand looks professional when shared on social media platforms.
+This architecture demonstrates a robust and scalable setup that mirrors a real-world production environment, where maintaining consistency and development velocity across multiple applications is crucial.
 
 ## Future Improvements
 

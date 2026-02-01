@@ -62,12 +62,14 @@ export const Hero = () => {
                 height={598}
                 className="relative md:absolute md:-right-2 md:top-1/6 z-10 max-w-full w-full md:w-full"
                 alt="Hero"
+                priority
               />
               <Image
                 src={"/images/spider.svg"}
                 height={1038}
                 width={782}
                 className="absolute top-0 left-0 z-0 md:hidden h-full w-full"
+                priority
                 alt=""
               />
             </div>

@@ -1,6 +1,7 @@
 import React from "react";
-import { Table, Button, type Column } from "@nesso/shared-ui";
+import { Button } from "@nesso/shared-ui";
 import type { Project } from "@nesso/shared-config";
+import { Table, type Column } from "./Table";
 
 
 type ExtendedProject = Project & {

@@ -7,7 +7,7 @@ import { ProjectTable } from "./components/ProjectTable";
 import { ProjectForm } from "./components/ProjectForm";
 import { Header } from "./components/Header";
 import { Sidebar } from "./components/Sidebar";
-import { Button, Modal, Input } from "@nesso/shared-ui";
+import { Button, Modal, Input, Heading, Card } from "@nesso/shared-ui";
 import "./App.css";
 
 function App() {
@@ -79,45 +79,45 @@ function App() {
       <div className="flex-1 flex flex-col">
         <Header />
         <main className="flex-1 p-8">
-          <h1 className="text-3xl font-bold text-gray-800 mb-6">
-            Project Management Dashboard
-          </h1>
-          <div className="bg-white rounded-lg shadow p-6">
-            <div className="flex justify-between items-center mb-4 gap-2">
-              <Input
-                type="text"
-                placeholder="Search projects..."
-                value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
-                className="w-1/3"
-              />
-              <Button
-                size="md"
-                onClick={handleAddProject}
-                variant="outline"
-                className="text-nowrap"
-              >
-                Add Project
-              </Button>
-            </div>
-            <ProjectTable
-              projects={paginatedProjects}
-              onDelete={handleDeleteProject}
-              onEdit={handleEditProject}
-            />
-            <div className="flex justify-center mt-4 space-x-2">
-              {Array.from({ length: totalPages }, (_, i) => (
+          <Heading size="md" className="mb-6">Project Management Dashboard</Heading>
+          <Card className="rounded-lg bg-white overflow-hidden">
+            <div className="flex flex-col gap-4">
+              <div className="flex justify-between items-center mb-4 gap-2">
+                <Input
+                  type="text"
+                  placeholder="Search projects..."
+                  value={searchTerm}
+                  onChange={(e) => setSearchTerm(e.target.value)}
+                  className="w-1/3"
+                />
                 <Button
-                  key={i + 1}
-                  onClick={() => handlePageChange(i + 1)}
-                  variant={currentPage === i + 1 ? "primary" : "secondary"}
-                  size="sm"
+                  size="md"
+                  onClick={handleAddProject}
+                  variant="outline"
+                  className="text-nowrap"
                 >
-                  {i + 1}
+                  Add Project
                 </Button>
-              ))}
+              </div>
+              <ProjectTable
+                projects={paginatedProjects}
+                onDelete={handleDeleteProject}
+                onEdit={handleEditProject}
+              />
+              <div className="flex justify-center mt-4 space-x-2">
+                {Array.from({ length: totalPages }, (_, i) => (
+                  <Button
+                    key={i + 1}
+                    onClick={() => handlePageChange(i + 1)}
+                    variant={currentPage === i + 1 ? "primary" : "secondary"}
+                    size="sm"
+                  >
+                    {i + 1}
+                  </Button>
+                ))}
+              </div>
             </div>
-          </div>
+          </Card>
         </main>
       </div>
 

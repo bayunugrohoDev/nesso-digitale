@@ -1,86 +1,99 @@
-Nesso Labs - Senior Front-End Take-Home Project
-A high-quality, production-ready monorepo demonstrating a marketing landing page (Next.js) and a dashboard feature (Vite), built with a shared component architecture.
+# Senior Front-End Engineer Take-Home Project
 
-🚀 Tech Stack
-Monorepo Management: npm Workspaces
+## Overview
 
-Frameworks: Next.js 15 (App Router), React + Vite
+This repository contains the implementation for a take-home project designed to showcase skills in building a responsive landing page with Next.js, a reusable component set, and a small "app-like" feature with React (Vite). The project is structured as a monorepo to maximize code sharing and maintainability.
 
-Styling: Tailwind CSS v4 (Shared configuration)
+## What Was Built & Project Navigation
 
-State Management: Zustand (for Vite dashboard logic)
+The project is divided into three main packages within this monorepo:
 
-Testing: Vitest + React Testing Library
+1.  **Landing Page (`apps/next-landing-page`)**
+    *   A responsive marketing website built with Next.js and the App Router.
+    *   Implements several standard sections: Hero, Services, Features, Projects, CTA, and a Footer.
 
-Typography & Icons: Lucide React, Custom Typography System
+2.  **Dashboard App (`apps/vite-dashboard`)**
+    *   A small, self-contained single-page application built with React and Vite.
+    *   Its core feature is displaying project data in a `ProjectTable` and allowing users to add/edit data via a `ProjectForm`.
+    *   Demonstrates state management, component decomposition, and handling user interactions.
 
-📂 Project Structure
-Plaintext
-/apps
-  /next-landing-page  # Next.js marketing site (SEO & Performance)
-  /vite-dashboard     # Vite-based app (Complex State & Interactivity)
-/packages
-  /shared-ui          # Reusable React components (Button, Heading, Text, etc.)
-  /shared-config      # Shared constants and TypeScript configurations
-  /shared-tailwind    # Shared styling theme using Tailwind v4
-🛠 Setup & Installation
-Prerequisites: Node.js (v18+)
+3.  **Shared UI Library (`packages/shared-ui`)**
+    *   A set of reusable UI components shared by both the landing page and the dashboard app.
+    *   Available components include: `Button`, `Card`, `Input`, `Table`, `Typography`, etc.
+    *   Designed for consistency and reusability.
 
-Clone the repository and install dependencies:
+## Setup & Running the Project
 
-Bash
-npm install
-Run the development servers:
+**Prerequisites:**
+*   Node.js v20.x or higher
 
-Bash
-# Run both apps simultaneously
-npm run dev
-Run unit tests for the Vite dashboard:
+**Steps:**
 
-Bash
-npm run test -w vite-dashboard
-💡 Key Technical Decisions & Trade-offs
-1. Monorepo Architecture
-I chose a monorepo structure to demonstrate how to manage shared UI libraries and configurations across multiple applications. This reflects real-world scenarios where a marketing site (Next.js) and a product app (Vite) coexist.
+1.  **Clone the repository:**
+    ```bash
+    git clone <YOUR_REPO_URL>
+    cd nesso-assignment
+    ```
 
-2. Shared UI Pattern (Atomic-ish)
-The /packages/shared-ui contains highly reusable, accessible, and themeable components.
+2.  **Install dependencies:**
+    This project uses NPM workspaces. Install all dependencies from the root directory.
+    ```bash
+    npm install
+    ```
 
-Typography System: Implemented a polymorphic <Heading> and <Text> component to ensure semantic HTML and design consistency.
+3.  **Run the applications:**
+    *   **To run the Landing Page (Next.js):**
+        ```bash
+        npm run dev:next
+        ```
+        Open [http://localhost:3000](http://localhost:3000) in your browser.
 
-Tailwind v4 Integration: Used the new @source directive to enable CSS scanning across workspace packages without complex config files.
+    *   **To run the Dashboard App (Vite):**
+        ```bash
+        npm run dev:vite
+        ```
+        Open [http://localhost:5173](http://localhost:5173) (or the port shown in your terminal).
 
-3. SEO & Performance (Next.js)
-Metadata API: Implemented for proper indexing and Open Graph visibility.
+    *   **To run Unit Tests (Vite):**
+        ```bash
+        npm run test
+        ```
+    *   **To run Both Landing page and Dasboard ap:**
+        ```bash
+        npm run dev
+        ```
 
-Image Optimization: Utilized next/image with priority loading for LCP (Largest Contentful Paint) elements (Hero & Logo).
 
-Core Web Vitals: Minimized layout shifts by explicitly defining aspect ratios for media elements.
+## Technical Decisions & Trade-offs
 
-4. Engineering Judgment in Vite App
-For the "app-like" feature, I focused on:
+*   **Monorepo Architecture:**
+    Monorepo Architecture: I chose a monorepo structure using NPM Workspaces to cleanly separate the applications (`next-landing-page`, `vite-dashboard`) while enabling efficient code sharing. This is most evident with the `shared-ui` and `shared-tailwind` packages, ensuring visual and functional consistency across the project.
 
-State Management: Used Zustand for its lightweight footprint and clean store pattern.
+*   **Styling:**
+    Styling & Tailwind v4: I utilized Tailwind CSS v4 for the landing page to leverage its "CSS-first" engine. To bridge the gap between v4 (Next.js) and v3 (Vite), I centralized design tokens using CSS Variables in packages/shared-tailwind. This ensures a "pixel-tight" implementation from Figma while managing the different configuration systems of each framework..
 
-Separation of Concerns: Logic for data filtering and sorting is decoupled from the UI, making it easily testable.
+*   **State Management (Vite App):**
+    State Management (Vite App): For the dashboard, I relied on React's built-in state management and URL search parameters for filtering logic. By avoiding external libraries like Redux or Zustand, I kept the bundle size minimal and ensured that the application state (like search results) is easily shareable and bookmarkable via the URL—a key requirement for admin-style dashboards.
 
-♿ Accessibility (A11y)
-Semantic HTML: Strict use of <header>, <main>, <section>, and sequential heading levels (H1-H3).
+## Additional Notes
 
-Keyboard Navigation: Interactive elements like the mobile menu and project carousel are fully accessible via keyboard.
+Responsiveness:
+The layout follows a mobile-first strategy, specifically addressing complex elements like the Hero image and project carousels. I used `overflow-x-hidden` on section levels and switched from `w-screen` to `w-full` for decorative lines to prevent unwanted horizontal scrolling on mobile devices.
 
-Focus Management: Clear focus states for all interactive buttons and inputs.
+Accessibility:
+I prioritized semantic HTML by using tags like `<header>`, `<main>`, and `<section>`. To ensure a great user experience for everyone, I implemented proper keyboard navigation and used the key prop pattern in forms to ensure state resets correctly without side effects, making the UI more predictable.
 
-🔮 What's Next (Future Improvements)
-If I had more time, I would:
+Performance:
+I leverAGED the `next/image` component with the `priority` attribute for Hero assets to optimize Largest Contentful Paint (LCP). Additionally, I resolved Next.js image warnings by explicitly managing aspect ratios with `width: auto` and `height: auto` styles to prevent layout shifts.
 
-Storybook: Implement Storybook for /shared-ui to document component variants.
+SEO (for the Landing Page):
+Metadata is centrally managed in `layout.tsx` using the Next.js Metadata API. I ensured a clean document outline with a single H1 per page and implemented Open Graph (OG) tags to ensure the brand looks professional when shared on social media platforms.
 
-E2E Testing: Add Playwright tests for critical user flows (e.g., CTA clicks).
+## Future Improvements
 
-CI/CD: Setup GitHub Actions for automated linting and testing on every PR.
-
-📝 Notes on Figma Implementation
-Pixel-Tight: Every spacing and color (primary #0B5ED7) was matched strictly with the provided Figma.
-
-Assumptions: Since some hover states weren't defined, I implemented subtle scale and opacity transitions to enhance the UX.
+If I had more time, I would focus on the following:
+*   Real-time Data Integration: Connecting the Dashboard and Landing Page through a shared API, so any project updates in the Dashboard reflect automatically on the Landing Page.
+*   Scroll Animations: Adding reveal effects on scroll using Framer Motion to give the Landing Page a more premium and interactive feel.
+*   Lazy Load Loading: Implementing lazy loading for section components to improve the user experience and reduce the initial bundle size.
+*   Dashboard Optimizations: Improving mobile responsiveness for the dashboard and adding features like drag-and-drop for reordering projects.
+*   Expanded Testing: Increasing code coverage with more unit tests and adding E2E testing with Playwright to ensure critical user flows are rock-solid.

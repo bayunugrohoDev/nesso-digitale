@@ -1,6 +1,6 @@
-import React, { useState, useEffect } from 'react';
-import { type Project } from '@nesso/shared-config';
-import { Input, Textarea, Button } from '@nesso/shared-ui';
+import React, { useState } from "react";
+import { type Project } from "@nesso/shared-config";
+import { Input, Textarea, Button } from "@nesso/shared-ui";
 
 interface ProjectFormProps {
   project?: Project | null;
@@ -13,25 +13,14 @@ export const ProjectForm: React.FC<ProjectFormProps> = ({
   onSubmit,
   onCancel,
 }) => {
-  const [formData, setFormData] = useState<Project>({
-    title: '',
-    client: '',
-    description: '',
-    image: '',
-  });
-
-  useEffect(() => {
-    if (project) {
-      setFormData(project);
-    } else {
-      setFormData({
-        title: '',
-        client: '',
-        description: '',
-        image: '',
-      });
+  const [formData, setFormData] = useState<Project>(
+    project || {
+      title: "",
+      client: "",
+      description: "",
+      image: "",
     }
-  }, [project]);
+  );
 
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
@@ -47,7 +36,10 @@ export const ProjectForm: React.FC<ProjectFormProps> = ({
   return (
     <form onSubmit={handleSubmit} className="space-y-4">
       <div>
-        <label htmlFor="title" className="block text-sm font-medium text-gray-700">
+        <label
+          htmlFor="title"
+          className="block text-sm font-medium text-gray-700"
+        >
           Title
         </label>
         <Input
@@ -61,7 +53,10 @@ export const ProjectForm: React.FC<ProjectFormProps> = ({
         />
       </div>
       <div>
-        <label htmlFor="client" className="block text-sm font-medium text-gray-700">
+        <label
+          htmlFor="client"
+          className="block text-sm font-medium text-gray-700"
+        >
           Client
         </label>
         <Input
@@ -75,7 +70,10 @@ export const ProjectForm: React.FC<ProjectFormProps> = ({
         />
       </div>
       <div>
-        <label htmlFor="description" className="block text-sm font-medium text-gray-700">
+        <label
+          htmlFor="description"
+          className="block text-sm font-medium text-gray-700"
+        >
           Description
         </label>
         <Textarea
@@ -88,11 +86,16 @@ export const ProjectForm: React.FC<ProjectFormProps> = ({
         />
       </div>
       <div>
-        <label htmlFor="image" className="block text-sm font-medium text-gray-700">
+        <label
+          htmlFor="image"
+          className="block text-sm font-medium text-gray-700"
+        >
           Image URL
+          <p className="text-xs text-gray-500">
+            for now, use url image to update image
+          </p>
         </label>
         <Input
-          // type="url"
           name="image"
           id="image"
           value={formData.image}
@@ -104,8 +107,8 @@ export const ProjectForm: React.FC<ProjectFormProps> = ({
         <Button type="button" variant="ghost" onClick={onCancel}>
           Cancel
         </Button>
-        <Button type="submit" variant="primary">
-          {project ? 'Update Project' : 'Add Project'}
+        <Button type="submit" variant="primary" data-testid="submit-project">
+          {project ? "Update Project" : "Add Project"}
         </Button>
       </div>
     </form>

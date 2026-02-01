@@ -4,7 +4,7 @@ interface NavLinkProps extends React.AnchorHTMLAttributes<HTMLAnchorElement> {
   isActive?: boolean;
 }
 
-const NavLink: React.FC<NavLinkProps> = ({ children, isActive, className, ...props }) => {
+export const NavLink: React.FC<NavLinkProps> = ({ children, isActive, className, ...props }) => {
   return (
     <a
       className={`block px-4 py-2 rounded-md text-sm font-medium ${
@@ -18,5 +18,3 @@ const NavLink: React.FC<NavLinkProps> = ({ children, isActive, className, ...pro
     </a>
   );
 };
-
-export { NavLink };

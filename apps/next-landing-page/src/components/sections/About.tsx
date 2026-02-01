@@ -13,6 +13,7 @@ export const About = () => {
               height={683}
               width={683}
               alt="Nesso Digitale"
+              priority
             />
           </div>
 

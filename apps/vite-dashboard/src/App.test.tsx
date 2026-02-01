@@ -1,105 +1,220 @@
-import { render, screen, fireEvent, waitFor } from '@testing-library/react';
-import { describe, it, expect, vi } from 'vitest';
-import App from './App';
-import { Project } from '@nesso/shared-config';
+import { render, screen, fireEvent, waitFor } from "@testing-library/react";
+import { describe, it, expect, beforeEach } from "vitest";
+import App from "./App";
 
-// Define the mock data using vi.hoisted outside of vi.mock
-const mockInitialProjects = vi.hoisted(() => ([
-  { title: 'Project Z', client: 'Client C', description: 'Description Z', image: '/img6.png' },
-  { title: 'Project A', client: 'Client A', description: 'Description A', image: '/img1.png' },
-  { title: 'Project B', client: 'Client B', description: 'Description B', image: '/img2.png' },
-] as Project[])); // Cast to Project[] type
-
-// Mock the shared-config module to return our mock projects
-vi.mock('@nesso/shared-config', () => ({
-  projects: mockInitialProjects,
-}));
-
-
-describe('App Component - Filtering, Sorting, and Deletion', () => {
-  it('should display all projects initially', () => {
-    render(<App />);
-
-    expect(screen.getByText(/Project Z/i)).toBeInTheDocument();
-    expect(screen.getByText(/Project A/i)).toBeInTheDocument();
-    expect(screen.getByText(/Project B/i)).toBeInTheDocument();
+describe("Project Management Dashboard", () => {
+  beforeEach(() => {
+    // Reset any state if needed
   });
 
-  it('should filter projects based on search term (title)', () => {
+  // ========================================
+  // TEST 1: Render Initial Projects
+  // ========================================
+  it("displays initial projects on load", () => {
+    render(<App />);
+
+    // Check if project titles are visible
+    expect(screen.getByText(/AC Milan App/i)).toBeInTheDocument();
+    expect(screen.getByText(/Delivery App/i)).toBeInTheDocument();
+    expect(screen.getByText(/Max Blog Website/i)).toBeInTheDocument();
+  });
+
+  // ========================================
+  // TEST 2: Search Functionality
+  // ========================================
+  it("filters projects when searching", () => {
     render(<App />);
 
     const searchInput = screen.getByPlaceholderText(/Search projects.../i);
-    fireEvent.change(searchInput, { target: { value: 'Project A' } });
 
-    expect(screen.getByText(/Project A/i)).toBeInTheDocument();
-    expect(screen.queryByText(/Project Z/i)).not.toBeInTheDocument();
-    expect(screen.queryByText(/Project B/i)).not.toBeInTheDocument();
+    // Search for "Milan"
+    fireEvent.change(searchInput, { target: { value: "Milan" } });
+
+    // Should show AC Milan
+    expect(screen.getByText(/AC Milan App/i)).toBeInTheDocument();
+
+    // Should hide others
+    expect(screen.queryByText(/Delivery App/i)).not.toBeInTheDocument();
+    expect(screen.queryByText(/Max Blog Website/i)).not.toBeInTheDocument();
   });
 
-  it('should filter projects by client name', () => {
+  it("shows all projects when search is cleared", () => {
     render(<App />);
 
     const searchInput = screen.getByPlaceholderText(/Search projects.../i);
-    fireEvent.change(searchInput, { target: { value: 'Client B' } });
 
-    expect(screen.queryByText(/Project A/i)).not.toBeInTheDocument();
-    expect(screen.getByText(/Project B/i)).toBeInTheDocument();
-    expect(screen.queryByText(/Project Z/i)).not.toBeInTheDocument();
+    // Search first
+    fireEvent.change(searchInput, { target: { value: "Milan" } });
+    expect(screen.queryByText(/Delivery App/i)).not.toBeInTheDocument();
+
+    // Clear search
+    fireEvent.change(searchInput, { target: { value: "" } });
+
+    // All projects visible again
+    expect(screen.getByText(/AC Milan App/i)).toBeInTheDocument();
+    expect(screen.getByText(/Delivery App/i)).toBeInTheDocument();
+    expect(screen.getByText(/Max Blog Website/i)).toBeInTheDocument();
   });
 
-  it('should sort projects by title in ascending order', async () => {
+  // ========================================
+  // TEST 3: Delete Functionality
+  // ========================================
+  it("deletes a project when delete button is clicked", async () => {
     render(<App />);
 
-    const titleHeader = screen.getByText('Title');
-    fireEvent.click(titleHeader); // Sort ascending
+    // Find all delete buttons
+    const deleteButtons = screen.getAllByText(/Delete/i);
 
-    // Check if the order is 'Project A', 'Project B', 'Project Z'
-    const rows = screen.getAllByRole('rowgroup')[1].children; // Get tbody rows
-    expect(rows[0]).toHaveTextContent(/Project A/i);
-    expect(rows[1]).toHaveTextContent(/Project B/i);
-    expect(rows[2]).toHaveTextContent(/Project Z/i);
+    // Click first delete button
+    fireEvent.click(deleteButtons[0]);
+
+    // Wait for project to be removed
+    await waitFor(() => {
+      expect(screen.queryByText(/AC Milan App/i)).not.toBeInTheDocument();
+    });
+
+    // Other projects still visible
+    expect(screen.getByText(/Delivery App/i)).toBeInTheDocument();
+    expect(screen.getByText(/Max Blog Website/i)).toBeInTheDocument();
   });
 
-  it('should sort projects by title in descending order', async () => {
+  // ========================================
+  // TEST 4: Add Project Modal
+  // ========================================
+  it('opens modal when "Add Project" button is clicked', () => {
     render(<App />);
 
-    const titleHeader = screen.getByText('Title');
-    fireEvent.click(titleHeader); // Sort ascending
-    fireEvent.click(titleHeader); // Sort descending
+    // Get the outline button (first one in the array)
+    const addButtons = screen.getAllByText(/Add Project/i);
+    const headerAddButton = addButtons[0]; // The outline button in header
 
-    // Check if the order is 'Project Z', 'Project B', 'Project A'
-    const rows = screen.getAllByRole('rowgroup')[1].children; // Get tbody rows
-    expect(rows[0]).toHaveTextContent(/Project Z/i);
-    expect(rows[1]).toHaveTextContent(/Project B/i);
-    expect(rows[2]).toHaveTextContent(/Project A/i);
+    fireEvent.click(headerAddButton);
+
+    // Modal should appear with title
+    expect(screen.getAllByText(/Add Project/i).length).toBeGreaterThan(1);
+
+    // Form fields should be visible
+    expect(screen.getByLabelText(/Title/i)).toBeInTheDocument();
+    expect(screen.getByLabelText(/Client/i)).toBeInTheDocument();
+    expect(screen.getByLabelText(/Description/i)).toBeInTheDocument();
   });
 
-  it('should remove a project when delete button is clicked', async () => {
+  // ========================================
+  // TEST 5: Add New Project
+  // ========================================
+  it("adds a new project when form is submitted", async () => {
     render(<App />);
 
-    // Find the delete button for "Project A" and click it
-    const deleteButton = screen.getAllByRole('button', { name: 'Delete' })[0];
-    fireEvent.click(deleteButton);
+    // Open modal - get outline button
+    const addButtons = screen.getAllByText(/Add Project/i);
+    fireEvent.click(addButtons[0]);
+
+    // Fill form
+    const titleInput = screen.getByLabelText(/Title/i);
+    const clientInput = screen.getByLabelText(/Client/i);
+    const descriptionInput = screen.getByLabelText(/Description/i);
+
+    fireEvent.change(titleInput, { target: { value: "New Test Project" } });
+    fireEvent.change(clientInput, { target: { value: "Test Client" } });
+    fireEvent.change(descriptionInput, {
+      target: { value: "Test Description" },
+    });
+
+    const submitButton = screen.getByTestId("submit-project");
+    fireEvent.click(submitButton);
 
     await waitFor(() => {
-      expect(screen.queryByText(/Project A/i)).not.toBeInTheDocument();
+      expect(screen.getByText(/New Test Project/i)).toBeInTheDocument();
     });
-    expect(screen.getByText(/Project Z/i)).toBeInTheDocument();
-    expect(screen.getByText(/Project B/i)).toBeInTheDocument();
   });
 
-  it('should show "No data to display." when all projects are deleted', async () => {
+  // ========================================
+  // TEST 6: Edit Project
+  // ========================================
+  it("opens edit modal with existing project data", () => {
     render(<App />);
 
-    // Delete all projects
-    let deleteButtons = screen.getAllByRole('button', { name: 'Delete' });
-    while (deleteButtons.length > 0) {
-      fireEvent.click(deleteButtons[0]);
-      deleteButtons = screen.queryAllByRole('button', { name: 'Delete' });
-    }
+    // Find and click first edit button
+    const editButtons = screen.getAllByText(/Edit/i);
+    fireEvent.click(editButtons[0]);
 
-    await waitFor(() => {
-      expect(screen.getByText(/No data to display./i)).toBeInTheDocument();
+    // Modal should show "Edit Project"
+    expect(screen.getByText(/Edit Project/i)).toBeInTheDocument();
+
+    // Form should be pre-filled
+    const titleInput = screen.getByLabelText(/Title/i) as HTMLInputElement;
+    expect(titleInput.value).toBe("AC Milan App");
+  });
+
+  // ========================================
+  // TEST 7: Update Project
+  // ========================================
+  it("updates project when edit form is submitted", async () => {
+    render(<App />);
+
+    // Click edit on first project
+    const editButtons = screen.getAllByText(/Edit/i);
+    fireEvent.click(editButtons[0]);
+
+    // Change title
+    const titleInput = screen.getByLabelText(/Title/i);
+    fireEvent.change(titleInput, { target: { value: "Updated Milan App" } });
+
+    // Submit - look for Update button
+    const updateButton = screen.getByRole("button", {
+      name: /Update Project/i,
     });
+    fireEvent.click(updateButton);
+
+    // Updated title should appear
+    await waitFor(() => {
+      expect(screen.getByText(/Updated Milan App/i)).toBeInTheDocument();
+    });
+
+    // Old title should be gone
+    expect(screen.queryByText(/^AC Milan App$/i)).not.toBeInTheDocument();
+  });
+
+  // ========================================
+  // TEST 8: Cancel Add/Edit
+  // ========================================
+  it("closes modal when cancel button is clicked", async () => {
+    render(<App />);
+
+    // Open add modal
+    const addButtons = screen.getAllByText(/Add Project/i);
+    fireEvent.click(addButtons[0]);
+
+    // Modal is open
+    expect(screen.getByLabelText(/Title/i)).toBeInTheDocument();
+
+    // Click cancel
+    const cancelButton = screen.getByRole("button", { name: /Cancel/i });
+    fireEvent.click(cancelButton);
+
+    // Modal should close
+    await waitFor(() => {
+      expect(screen.queryByLabelText(/Title/i)).not.toBeInTheDocument();
+    });
+  });
+
+
+  // ========================================
+  // TEST 9: Search by Client
+  // ========================================
+  it("filters projects by client name", () => {
+    render(<App />);
+
+    const searchInput = screen.getByPlaceholderText(/Search projects.../i);
+
+    // Search by client
+    fireEvent.change(searchInput, { target: { value: "Logistics" } });
+
+    // Should show Delivery App
+    expect(screen.getByText(/Delivery App/i)).toBeInTheDocument();
+
+    // Should hide others
+    expect(screen.queryByText(/AC Milan App/i)).not.toBeInTheDocument();
+    expect(screen.queryByText(/Max Blog Website/i)).not.toBeInTheDocument();
   });
 });

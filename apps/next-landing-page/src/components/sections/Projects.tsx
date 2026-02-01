@@ -104,6 +104,7 @@ export const Projects = () => {
                   height={600}
                   alt={currentProject.title}
                   className="object-cover"
+                  priority
                 />
               </motion.div>
             </AnimatePresence>

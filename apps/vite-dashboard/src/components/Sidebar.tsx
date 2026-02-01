@@ -1,5 +1,5 @@
-import React from 'react';
-import { NavLink } from '@nesso/shared-ui';
+import React from "react";
+import { NavLink } from "@nesso/shared-ui";
 
 export const Sidebar: React.FC = () => {
   return (
@@ -10,12 +10,6 @@ export const Sidebar: React.FC = () => {
           <li className="mb-2">
             <NavLink href="#" isActive={true}>
               Projects
-            </NavLink>
-          </li>
-          {/* Add more navigation links here as needed */}
-          <li className="mb-2">
-            <NavLink href="#" isActive={false}>
-              Settings
             </NavLink>
           </li>
         </ul>

@@ -29,7 +29,7 @@ const NewsCard = ({
 }) => {
   return (
     <div className="flex flex-col gap-5">
-      <Image src="/images/news-1.png" alt="Niscala" width={427} height={395} className="w-full"/>
+      <Image src="/images/news-1.png" alt="Niscala" width={427} height={395} className="w-full" priority/>
       <div className="flex flex-col gap-2">
         <Heading className="text-[#2F2F2F]" size="xs">
           {title}

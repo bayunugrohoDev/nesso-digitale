@@ -10,10 +10,20 @@
     "dev:next": "npm run dev --workspace=apps/next-landing-page",
     "dev:vite": "npm run dev --workspace=apps/vite-dashboard",
     "dev": "concurrently \"npm run dev:next\" \"npm run dev:vite\"",
-    "build:all": "npm run build --workspaces --if-present",
-    "test": "npm run test --workspace=react-vite-feature"
+    "test": "npm run test --workspace=apps/vite-dashboard",
+    "build": "concurrently \"npm run build --workspace=apps/next-landing-page\" \"npm run build --workspace=apps/vite-dashboard\""
   },
   "devDependencies": {
     "concurrently": "^8.2.2"
+  },
+  "dependencies": {
+    "react": "^19.2.0",
+    "react-dom": "^19.2.0"
+  },
+  "overrides": {
+    "lucide-react": {
+      "react": "19.0.0"
+    }
   }
 }
+

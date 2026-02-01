@@ -37,7 +37,7 @@ export const Features = () => {
               </Text>
             </div>
           </div>
-          <Image src={"/images/cta.png"} width={480} height={215} alt="CTA" />
+          <Image src={"/images/cta.png"} width={480} height={215} alt="CTA" priority />
           <div className="grid gap-4">
             <Heading as="h3" size="xs" className="text-[#8E8E8E]">
               Gestionale leggero su misura

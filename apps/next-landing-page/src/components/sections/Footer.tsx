@@ -28,6 +28,7 @@ export const Footer = () => {
                   alt="Logo"
                   width={192}
                   height={45}
+                  priority
                 />
               </a>
               <p className="text-[#2F3042] mb-4">

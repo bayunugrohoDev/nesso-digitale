@@ -8,7 +8,7 @@ export type Column<T> = {
   sortable?: boolean;
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   cell?: (value: any, row: T) => React.ReactNode;
-  className?: string; // Add className for column specific styling
+  className?: string
 };
 
 type TableProps<T> = {
@@ -107,7 +107,7 @@ export function Table<T>({ data, columns }: TableProps<T>) {
                   >
                     {column.cell
                       ? column.cell(row[column.accessor], row)
-                      : String(row[column.accessor])} {/* Explicitly convert to string */}
+                      : String(row[column.accessor])} 
                   </td>
                 ))}
               </tr>

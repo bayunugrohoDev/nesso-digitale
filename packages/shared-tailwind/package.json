@@ -1,0 +1,9 @@
+{
+  "name": "@nesso/shared-tailwind",
+  "version": "1.0.0",
+  "private": true,
+  "main": "./theme.css",
+  "exports": {
+    "./theme.css": "./theme.css"
+  }
+}

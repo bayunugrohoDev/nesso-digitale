@@ -1,0 +1,40 @@
+@theme {
+    /* Colors - Shared */
+    --color-primary: #0066FF;
+    --color-primary-dark: #0052CC;
+    --color-primary-light: #3385FF;
+    
+    --color-dark: #000000;
+    --color-dark-light: #1A1A1A;
+    
+    /* Spacing - Shared */
+    --spacing-18: 4.5rem;
+    --spacing-112: 28rem;
+    --spacing-128: 32rem;
+    
+    /* Font sizes - Shared */
+    --font-size-display-lg: 4.5rem;
+    --font-size-display-md: 3.5rem;
+    --font-size-display-sm: 2.5rem;
+    
+    /* Animations - Shared */
+    --animate-fade-in: fade-in 0.5s ease-in-out;
+    --animate-slide-up: slide-up 0.5s ease-out;
+  }
+  
+  /* Keyframes for animations */
+  @keyframes fade-in {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+  
+  @keyframes slide-up {
+    from {
+      transform: translateY(20px);
+      opacity: 0;
+    }
+    to {
+      transform: translateY(0);
+      opacity: 1;
+    }
+  }

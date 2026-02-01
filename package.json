@@ -1,0 +1,19 @@
+{
+  "name": "nesso-assignment",
+  "version": "1.0.0",
+  "description": "",
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
+  "scripts": {
+    "dev:next": "npm run dev --workspace=apps/next-landing-page",
+    "dev:vite": "npm run dev --workspace=apps/vite-dashboard",
+    "dev": "concurrently \"npm run dev:next\" \"npm run dev:vite\"",
+    "build:all": "npm run build --workspaces --if-present",
+    "test": "npm run test --workspace=react-vite-feature"
+  },
+  "devDependencies": {
+    "concurrently": "^8.2.2"
+  }
+}

@@ -1,0 +1,20 @@
+import React from "react";
+
+export const FacebookIcon = () => {
+  return (
+    <svg
+      width="12"
+      height="20"
+      viewBox="0 0 12 20"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <path
+        fillRule="evenodd"
+        clipRule="evenodd"
+        d="M10.5781 10.8771L11.0728 7.3217L7.274 7.3217V5.05172C7.274 4.02235 7.58239 3.32089 9.17517 3.32089L11.2066 3.32V0.14008C10.8552 0.0968294 9.64937 0 8.24649 0C5.31759 0 3.31252 1.65687 3.31252 4.69971V7.3217H0L0 10.8771H3.31252L3.31252 20H7.274V10.8771H10.5781Z"
+        fill="#86939E"
+      />
+    </svg>
+  );
+};
